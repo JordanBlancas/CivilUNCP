@@ -1,0 +1,233 @@
+\documentclass[aspectratio=169]{beamer}
+\input{slides/_preamble_slides}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{tikz}
+
+\title{Tensores}
+\subtitle{Álgebra Multilineal}
+\author{Jordan Blancas}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Contenido}
+  \tableofcontents
+\end{frame}
+
+% ========================================
+% Tensores
+% ========================================
+
+\section{Introducción a los Tensores}
+
+\begin{frame}{¿Qué es un Tensor?}
+  \begin{block}{Intuición}
+    Un tensor es una generalización multidimensional de:
+    \begin{itemize}
+      \item Escalar (tensor de orden 0): un número
+      \item Vector (tensor de orden 1): lista de números
+      \item Matriz (tensor de orden 2): tabla de números
+      \item Tensor de orden $n$: arreglo $n$-dimensional de números
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{Definición Informal}
+    Un tensor de orden $n$ (o rango $n$) en un espacio vectorial $V$ de dimensión $d$ es un objeto con $d^n$ componentes que se transforma de cierta manera bajo cambios de base.
+  \end{block}
+\end{frame}
+
+\section{Notación de Índices}
+
+\begin{frame}{Notación de Índices}
+  \begin{block}{Convención}
+    Un tensor se denota con índices superiores e inferiores:
+    $$T^{i_1 i_2 \cdots i_p}_{j_1 j_2 \cdots j_q}$$
+    \begin{itemize}
+      \item Índices superiores: componentes \textbf{contravariantes}
+      \item Índices inferiores: componentes \textbf{covariantes}
+      \item El tensor es de tipo $(p, q)$
+    \end{itemize}
+  \end{block}
+  
+  \begin{ejemplos}
+    \begin{itemize}
+      \item $v^i$: vector (tensor tipo $(1,0)$)
+      \item $\omega_j$: covector o 1-forma (tensor tipo $(0,1)$)
+      \item $A^i_j$: matriz o endomorfismo (tensor tipo $(1,1)$)
+      \item $T^{ij}_{k}$: tensor tipo $(2,1)$
+    \end{itemize}
+  \end{ejemplos}
+\end{frame}
+
+\section{Producto Tensorial}
+
+\begin{frame}{Producto Tensorial}
+  \begin{block}{Definición}
+    Sean $V$ y $W$ espacios vectoriales. El \textbf{producto tensorial} $V \otimes W$ es un nuevo espacio vectorial generado por símbolos $v \otimes w$ con $v \in V$, $w \in W$, sujeto a:
+    \begin{align*}
+      (v_1 + v_2) \otimes w &= v_1 \otimes w + v_2 \otimes w \\
+      v \otimes (w_1 + w_2) &= v \otimes w_1 + v \otimes w_2 \\
+      (\alpha v) \otimes w &= v \otimes (\alpha w) = \alpha(v \otimes w)
+    \end{align*}
+  \end{block}
+  
+  \begin{block}{Dimensión}
+    Si $\dim(V) = n$ y $\dim(W) = m$, entonces:
+    $$\dim(V \otimes W) = n \cdot m$$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Bases del Producto Tensorial}
+  \begin{block}{Teorema}
+    Si $\{e_1, \ldots, e_n\}$ es base de $V$ y $\{f_1, \ldots, f_m\}$ es base de $W$, entonces:
+    $$\{e_i \otimes f_j \,:\, 1 \leq i \leq n, \, 1 \leq j \leq m\}$$
+    es una base de $V \otimes W$.
+  \end{block}
+  
+  \begin{ejemplo}
+    En $\mathbb{R}^2 \otimes \mathbb{R}^2$, con bases canónicas:
+    \begin{align*}
+      &e_1 \otimes e_1, \quad e_1 \otimes e_2, \\
+      &e_2 \otimes e_1, \quad e_2 \otimes e_2
+    \end{align*}
+    forman una base. Un tensor general es:
+    $$T = T^{11} e_1 \otimes e_1 + T^{12} e_1 \otimes e_2 + T^{21} e_2 \otimes e_1 + T^{22} e_2 \otimes e_2$$
+  \end{ejemplo}
+\end{frame}
+
+\section{Tensores como Aplicaciones Multilineales}
+
+\begin{frame}{Tensores como Aplicaciones Multilineales}
+  \begin{block}{Definición Alternativa}
+    Un tensor de tipo $(p, q)$ sobre un espacio $V$ es una aplicación multilineal:
+    $$T: \underbrace{V^* \times \cdots \times V^*}_{p \text{ veces}} \times \underbrace{V \times \cdots \times V}_{q \text{ veces}} \to \mathbb{F}$$
+    donde $V^*$ es el espacio dual de $V$.
+  \end{block}
+  
+  \begin{ejemplos}
+    \begin{itemize}
+      \item Tensor $(0,0)$: escalar
+      \item Tensor $(1,0)$: vector en $V$
+      \item Tensor $(0,1)$: forma lineal (elemento de $V^*$)
+      \item Tensor $(1,1)$: transformación lineal $V \to V$
+      \item Tensor $(0,2)$: forma bilineal (ej: producto interno)
+    \end{itemize}
+  \end{ejemplos}
+\end{frame}
+
+\section{Operaciones con Tensores}
+
+\begin{frame}{Contracción de Tensores}
+  \begin{block}{Definición}
+    La \textbf{contracción} es una operación que reduce el rango de un tensor igualando un índice superior con uno inferior y sumando:
+    $$T^{i_1 \cdots i_p}_{j_1 \cdots j_q} \xrightarrow{\text{contracción}} S^{i_1 \cdots \hat{i}_k \cdots i_p}_{j_1 \cdots \hat{j}_\ell \cdots j_q} = \sum_{m} T^{i_1 \cdots m \cdots i_p}_{j_1 \cdots m \cdots j_q}$$
+    donde $\hat{i}_k$ y $\hat{j}_\ell$ indican índices omitidos.
+  \end{block}
+  
+  \begin{ejemplo}
+    Para un tensor $T^i_j$ (matriz), la contracción da:
+    $$T^i_i = \sum_{i=1}^n T^i_i = \text{tr}(T)$$
+    ¡Es la traza de la matriz!
+  \end{ejemplo}
+\end{frame}
+
+\begin{frame}{Operaciones con Tensores}
+  \begin{block}{Operaciones Básicas}
+    \begin{enumerate}
+      \item \textbf{Suma}: Solo entre tensores del mismo tipo
+      $$T + S = (T^{i_1\cdots i_p}_{j_1\cdots j_q} + S^{i_1\cdots i_p}_{j_1\cdots j_q})$$
+      
+      \item \textbf{Producto tensorial}: Aumenta el rango
+      $$T \otimes S$$
+      
+      \item \textbf{Contracción}: Disminuye el rango
+      
+      \item \textbf{Transformación de coordenadas}: Bajo cambio de base $e_i' = A^j_i e_j$:
+      $$T'^{i_1\cdots}_{j_1\cdots} = A^{i_1}_{k_1} \cdots (A^{-1})^{\ell_1}_{j_1} \cdots T^{k_1\cdots}_{\ell_1\cdots}$$
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+\section{Aplicaciones de Tensores}
+
+\begin{frame}{Aplicaciones de Tensores}
+  \begin{block}{En Física}
+    \begin{itemize}
+      \item \textbf{Mecánica}: Tensor de inercia, tensor de esfuerzos
+      \item \textbf{Relatividad General}: Tensor métrico $g_{\mu\nu}$, tensor de curvatura de Riemann $R^\rho_{\sigma\mu\nu}$
+      \item \textbf{Electromagnetismo}: Tensor electromagnético $F^{\mu\nu}$
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{En Ingeniería y Ciencias}
+    \begin{itemize}
+      \item \textbf{Análisis de datos}: Descomposición tensorial (Tucker, PARAFAC)
+      \item \textbf{Machine Learning}: Redes neuronales tensoriales, TensorFlow
+      \item \textbf{Procesamiento de señales}: Análisis multilineal
+      \item \textbf{Mecánica de medios continuos}: Tensor de deformación, tensor de Cauchy
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\section{Ejemplo: Tensor Métrico}
+
+\begin{frame}{Ejemplo: Tensor Métrico}
+  \begin{block}{Definición}
+    En geometría diferencial, el \textbf{tensor métrico} $g$ es un tensor simétrico de tipo $(0,2)$ que define el producto interno:
+    $$g: V \times V \to \mathbb{R}$$
+    $$g(v, w) = g_{ij} v^i w^j$$
+  \end{block}
+  
+  \begin{ejemplo}
+    En $\mathbb{R}^3$ con coordenadas cartesianas:
+    $$g_{ij} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$$
+    
+    En coordenadas esféricas $(r, \theta, \phi)$:
+    $$g_{ij} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & r^2 & 0 \\ 0 & 0 & r^2\sin^2\theta \end{pmatrix}$$
+  \end{ejemplo}
+\end{frame}
+
+\section{Resumen}
+
+\begin{frame}{Resumen}
+  \begin{block}{Conceptos Clave}
+    \begin{itemize}
+      \item \textbf{Tensor}: generalización multidimensional de escalares, vectores y matrices
+      \item \textbf{Tipo $(p,q)$}: $p$ índices contravariantes, $q$ covariantes
+      \item \textbf{Producto tensorial}: construye espacios de tensores
+      \item \textbf{Contracción}: reduce el rango del tensor
+      \item \textbf{Transformación}: reglas específicas bajo cambio de coordenadas
+    \end{itemize}
+  \end{block}
+  
+  \begin{alertblock}{Importancia}
+    Los tensores son fundamentales en física moderna, geometría diferencial, y aplicaciones en ingeniería y ciencia de datos.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Referencias}
+  \begin{thebibliography}{99}
+    \bibitem{kolecki} J. Kolecki, \textit{An Introduction to Tensors for Students of Physics and Engineering}, NASA Technical Memorandum, 2002.
+    
+    \bibitem{wald} R. Wald, \textit{General Relativity}, University of Chicago Press, 1984.
+    
+    \bibitem{lee} J. Lee, \textit{Introduction to Smooth Manifolds}, 2nd ed., Springer, 2012.
+    
+    \bibitem{schutz} B. Schutz, \textit{Geometrical Methods of Mathematical Physics}, Cambridge University Press, 1980.
+  \end{thebibliography}
+\end{frame}
+
+\begin{frame}
+  \centering
+  \Huge ¿Preguntas?
+  
+  \vspace{1cm}
+  
+  \Large Gracias por su atención
+\end{frame}
+
+\end{document}

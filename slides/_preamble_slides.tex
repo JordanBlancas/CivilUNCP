@@ -1,5 +1,8 @@
 % slides/_preamble_slides.tex
-\usetheme{Madrid}
+% Tema moderno minimalista
+\usetheme{default}
+\usecolortheme{default}
+
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -7,5 +10,109 @@
 \usepackage{graphicx}
 \usepackage{ifthen}
 \graphicspath{{figuras/}{./figuras/}{./}}
+
+% Colores modernos
+\definecolor{primaryColor}{RGB}{0, 102, 204}      % Azul profesional
+\definecolor{secondaryColor}{RGB}{255, 87, 51}    % Coral/naranja moderno
+\definecolor{accentColor}{RGB}{46, 204, 113}      % Verde menta
+\definecolor{darkGray}{RGB}{44, 62, 80}           % Gris oscuro
+\definecolor{lightGray}{RGB}{236, 240, 241}       % Gris claro
+\definecolor{textColor}{RGB}{33, 37, 41}          % Negro suave
+
+% Configuración del tema
+\setbeamercolor{structure}{fg=primaryColor}
+\setbeamercolor{palette primary}{bg=primaryColor,fg=white}
+\setbeamercolor{palette secondary}{bg=secondaryColor,fg=white}
+\setbeamercolor{palette tertiary}{bg=darkGray,fg=white}
+\setbeamercolor{palette quaternary}{bg=accentColor,fg=white}
+
+% Título y frames
+\setbeamercolor{titlelike}{parent=palette primary}
+\setbeamercolor{frametitle}{parent=palette primary}
+\setbeamercolor{block title}{bg=primaryColor,fg=white}
+\setbeamercolor{block body}{bg=lightGray,fg=textColor}
+\setbeamercolor{block title alerted}{bg=secondaryColor,fg=white}
+\setbeamercolor{block body alerted}{bg=lightGray,fg=textColor}
+\setbeamercolor{block title example}{bg=accentColor,fg=white}
+\setbeamercolor{block body example}{bg=lightGray,fg=textColor}
+
+% Items y enumeración
+\setbeamercolor{item}{fg=primaryColor}
+\setbeamercolor{subitem}{fg=secondaryColor}
+\setbeamercolor{subsubitem}{fg=accentColor}
+
+% Estilo de los frames
+\setbeamertemplate{frametitle}{
+  \vspace{0.5em}
+  \insertframetitle
+  \vspace{0.3em}
+}
+
+% Bloques con esquinas redondeadas
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+% Items modernos
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{enumerate items}[circle]
+
+% Sin símbolos de navegación
 \setbeamertemplate{navigation symbols}{}
-\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=red}
+
+% Footline moderno - color único azul oscuro
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1ex,leftskip=.3cm,rightskip=.3cm]{palette tertiary}%
+      \usebeamerfont{author in head/foot}\insertshortauthor
+      \hfill
+      \usebeamerfont{title in head/foot}\insertshorttitle
+      \hfill
+      \usebeamerfont{date in head/foot}\insertshortdate{}
+      \hspace*{2em}
+      \insertframenumber{} / \inserttotalframenumber
+    \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+% Título con diseño moderno
+\setbeamertemplate{title page}{
+  \vbox{}
+  \vfill
+  \begingroup
+    \centering
+    \begin{beamercolorbox}[sep=8pt,center]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%     
+    \end{beamercolorbox}%
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}\vskip0.5em
+  \endgroup
+  \vfill
+}
+
+% Tipografía moderna
+\setbeamerfont{title}{size=\Large,series=\bfseries}
+\setbeamerfont{subtitle}{size=\large}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamerfont{block title}{size=\normalsize,series=\bfseries}
+
+\hypersetup{colorlinks=true, linkcolor=primaryColor, urlcolor=primaryColor, citecolor=secondaryColor}
+
+% Definir entornos en español
+\newtheorem{teorema}{Teorema}
+\newtheorem{corolario}{Corolario}
+\theoremstyle{definition}
+\newtheorem{ejemplo}{Ejemplo}
+\newtheorem{ejemplos}{Ejemplos}

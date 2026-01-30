@@ -1,0 +1,199 @@
+\documentclass[aspectratio=169]{beamer}
+\input{_preamble_slides}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{listings}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!60!black},
+  stringstyle=\color{red},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  backgroundcolor=\color{lightGray}
+}
+
+\title{Transformaciones Lineales}
+\subtitle{Álgebra Lineal}
+\author{Jordan Blancas}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section{Motivación}
+\begin{frame}{¿Por qué estudiar transformaciones lineales?}
+  \begin{block}{Ejemplo visual}
+    Rotar una figura, proyectar una sombra, escalar una imagen, calcular fuerzas a partir de desplazamientos...
+  \end{block}
+  \pause
+  \begin{alertblock}{Idea}
+    Todas estas acciones son funciones que transforman vectores en otros vectores.
+  \end{alertblock}
+\end{frame}
+
+\section{Ejemplo concreto}
+\begin{frame}{Ejemplo numérico antes de la definición}
+  \begin{block}{Transformación simple}
+    Sea $T: \mathbb{R}^2 \to \mathbb{R}^2$ definida por:
+    $$T(x, y) = (2x, 3y)$$
+    \begin{itemize}
+      \item $T(1, 0) = (2, 0)$
+      \item $T(0, 1) = (0, 3)$
+      \item $T(2, 5) = (4, 15)$
+    \end{itemize}
+  \end{block}
+  \pause
+  \begin{block}{¿Qué pasa si sumo y luego transformo?}
+    $T(2+3, 1+2) = T(5, 3) = (10, 9)$\\
+    $T(2, 1) + T(3, 2) = (4, 3) + (6, 6) = (10, 9)$
+  \end{block}
+\end{frame}
+
+\section{Definición}
+\begin{frame}{Definición formal}
+  \begin{block}{Definición}
+    Una función $T: V \to W$ es \textbf{lineal} si cumple:
+    \begin{enumerate}
+      \item $T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v})$
+      \item $T(\alpha \vec{v}) = \alpha T(\vec{v})$
+    \end{enumerate}
+  \end{block}
+  \pause
+  \begin{alertblock}{Consecuencia}
+    $T(\vec{0}) = \vec{0}$ siempre
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Ejemplos y contraejemplos}
+  \begin{block}{Lineales $\checkmark$}
+    \begin{itemize}
+      \item $T(x, y) = (2x, 3y)$
+      \item $T(x, y) = (x-y, x+y)$
+      \item $T(\vec{x}) = A\vec{x}$
+    \end{itemize}
+  \end{block}
+  \pause
+  \begin{alertblock}{NO lineales $\times$}
+    \begin{itemize}
+      \item $T(x, y) = (x+1, y)$
+      \item $T(x, y) = (x^2, y)$
+      \item $T(x, y) = (\sin(x), y)$
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\section{Matriz asociada}
+\begin{frame}{¿Cómo se representa una transformación?}
+  \begin{block}{Idea clave}
+    Si sabes qué le pasa a los vectores de la base, sabes qué le pasa a cualquier vector.
+  \end{block}
+  \pause
+  \begin{block}{Ejemplo}
+    En $\mathbb{R}^2$, cualquier $(x, y) = x(1,0) + y(0,1)$\\
+    Si $T(1,0) = (a, c)$ y $T(0,1) = (b, d)$, entonces:
+    $$T(x,y) = x(a,c) + y(b,d) = (ax+by, cx+dy)$$
+    $$T\begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} a & b \\ c & d \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix}$$
+  \end{block}
+\end{frame}
+
+\section{Núcleo e Imagen}
+\begin{frame}{¿Qué se pierde y qué se alcanza?}
+  \begin{block}{Núcleo (Kernel)}
+    $\text{Ker}(T) = \{\vec{v} \in V : T(\vec{v}) = \vec{0}\}$\\
+    Vectores que se mapean a cero. Si solo el cero va a cero, $T$ es inyectiva.
+  \end{block}
+  \pause
+  \begin{block}{Imagen}
+    $\text{Im}(T) = \{T(\vec{v}) : \vec{v} \in V\}$\\
+    Vectores que se pueden alcanzar. Si se alcanza todo el codominio, $T$ es sobreyectiva.
+  \end{block}
+  \pause
+  \begin{ejemplo}
+    Proyección $T(x, y) = (x, 0)$:
+    $\text{Ker}(T) = \{(0, y)\}$ (eje $y$), $\text{Im}(T) = \{(x, 0)\}$ (eje $x$)
+  \end{ejemplo}
+\end{frame}
+
+\section{Teorema}
+\begin{frame}{Teorema de la Dimensión}
+  \begin{teorema}[Fundamental]
+    Para $T: V \to W$ lineal:
+    $$\boxed{\dim(V) = \dim(\text{Ker}(T)) + \dim(\text{Im}(T))}$$
+  \end{teorema}
+  \pause
+  \begin{block}{Interpretación}
+    Lo que se pierde (núcleo) + lo que se alcanza (imagen) = dimensión total
+  \end{block}
+  \pause
+  \begin{ejemplo}
+    $T: \mathbb{R}^5 \to \mathbb{R}^3$ con $\dim(\text{Ker}(T)) = 2$\\
+    $\Rightarrow \dim(\text{Im}(T)) = 5 - 2 = 3$\\
+    $\Rightarrow$ $T$ es sobreyectiva
+  \end{ejemplo}
+\end{frame}
+
+\section{Tipos}
+\begin{frame}{Tipos de Transformaciones}
+  \begin{block}{Inyectiva (uno a uno)}
+    $\text{Ker}(T) = \{\vec{0}\}$: no se pierde información
+  \end{block}
+  \begin{block}{Sobreyectiva (sobre)}
+    $\text{Im}(T) = W$: se alcanza todo el codominio
+  \end{block}
+  \begin{block}{Biyectiva (Isomorfismo)}
+    Inyectiva y sobreyectiva: existe $T^{-1}$\\
+    Para $T: \mathbb{R}^n \to \mathbb{R}^n$: $\det(A) \neq 0$
+  \end{block}
+\end{frame}
+
+\section{Código}
+\begin{frame}[fragile]{Código Python básico}
+\begin{lstlisting}
+import numpy as np
+
+# Matriz de transformacion
+A = np.array([[2, 1], [1, 3]])
+v = np.array([1, 2])
+print("T(v) =", A @ v)
+
+# Nucleo e imagen
+rango = np.linalg.matrix_rank(A)
+n = A.shape[1]
+nulidad = n - rango
+print(f"dim(Im(T)) = {rango}")
+print(f"dim(Ker(T)) = {nulidad}")
+print(f"Teorema: {n} = {nulidad} + {rango}")
+\end{lstlisting}
+\end{frame}
+
+\section{Resumen}
+\begin{frame}{Resumen y aplicaciones}
+  \begin{enumerate}
+    \item Motivación concreta
+    \item Ejemplo antes de la definición
+    \item Definición formal
+    \item Ejemplos y contraejemplos
+    \item Matriz asociada
+    \item Núcleo e imagen
+    \item Teorema de la dimensión
+    \item Tipos de transformaciones
+    \item Código Python
+  \end{enumerate}
+  \begin{alertblock}{Aplicaciones}
+    \begin{itemize}
+      \item Rotaciones, proyecciones, sistemas $F=Ku$
+      \item Compresión de datos (PCA, SVD)
+      \item Resolución de sistemas lineales
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\end{document}

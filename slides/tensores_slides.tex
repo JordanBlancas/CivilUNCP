@@ -1,0 +1,523 @@
+\documentclass[aspectratio=169]{beamer}
+\input{_preamble_slides}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{listings}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!60!black},
+  stringstyle=\color{red},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  backgroundcolor=\color{lightGray}
+}
+
+\title{Tensores}
+\subtitle{Álgebra Lineal}
+\author{Jordan Blancas}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Contenido}
+  \tableofcontents
+\end{frame}
+
+\section{Motivación}
+
+\begin{frame}{¿Qué son los tensores?}
+  \begin{block}{Empecemos desde lo conocido}
+    Ya sabes trabajar con:
+    \begin{itemize}
+      \item Números: temperatura = 25°C
+      \item Vectores: velocidad = $(3, 4, 5)$ m/s
+      \item Matrices: $A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}$
+    \end{itemize}
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{Pregunta}
+    ¿Y si necesitas algo más complejo? Por ejemplo:
+    \begin{itemize}
+      \item Un video: matriz que cambia en el tiempo (3D)
+      \item Relaciones entre matrices
+      \item Propiedades elásticas de materiales (conectan 2 vectores con 2 vectores)
+    \end{itemize}
+  \end{block}
+  
+  \pause
+  
+  \begin{alertblock}{Respuesta: TENSORES}
+    Los tensores son la generalización natural de escalares, vectores y matrices.
+  \end{alertblock}
+\end{frame}
+
+\section{Introducción}
+
+\begin{frame}{La jerarquía: de simple a complejo}
+  \begin{block}{Clasificación por ``cuántos índices necesitas''}
+    \begin{itemize}
+      \item \textbf{Escalar} (orden 0): $a$ - un solo número
+      \item \textbf{Vector} (orden 1): $v_i$ - necesitas 1 índice: $v_1, v_2, v_3$
+      \item \textbf{Matriz} (orden 2): $A_{ij}$ - necesitas 2 índices: $A_{11}, A_{12}, \ldots$
+      \item \textbf{Tensor} (orden $\geq 3$): $T_{ijk\ldots}$ - necesitas 3+ índices
+    \end{itemize}
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{Visualización}
+    \begin{itemize}
+      \item Escalar: un punto
+      \item Vector: una lista (1D)
+      \item Matriz: una tabla (2D)
+      \item Tensor orden 3: un ``cubo'' de números (3D)
+      \item Tensor orden 4: ... (difícil de visualizar!)
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Ejemplos físicos}
+  \begin{ejemplos}
+    \begin{tabular}{ll}
+      \textbf{Escalar (orden 0):} & Temperatura, presión, masa \\
+      & \\
+      \textbf{Vector (orden 1):} & Velocidad: $(v_x, v_y, v_z)$ \\
+      & Fuerza: $(F_x, F_y, F_z)$ \\
+      & \\
+      \textbf{Matriz (orden 2):} & Tensor de esfuerzos: $\sigma_{ij}$ \\
+      & Tensor de deformación: $\varepsilon_{ij}$ \\
+      & \\
+      \textbf{Tensor (orden 4):} & Tensor de elasticidad: $C_{ijkl}$ \\
+      & (relaciona esfuerzo con deformación) \\
+    \end{tabular}
+  \end{ejemplos}
+  
+  \pause
+  
+  \begin{alertblock}{En ingeniería civil}
+    El tensor de elasticidad $C_{ijkl}$ conecta esfuerzos con deformaciones:
+    $$\sigma_{ij} = C_{ijkl} \varepsilon_{kl}$$
+  \end{alertblock}
+\end{frame}
+
+\section{Notación de Índices}
+
+\begin{frame}{Simplificando la escritura}
+  \begin{block}{Problema}
+    Escribir sumas es tedioso:
+    $$\vec{v} \cdot \vec{w} = v_1 w_1 + v_2 w_2 + v_3 w_3 = \sum_{i=1}^3 v_i w_i$$
+  \end{block}
+  
+  \pause
+  
+  \begin{alertblock}{Solución: Notación de Einstein}
+    Si un índice aparece \textbf{dos veces}, se entiende que se suma:
+    $$v_i w_i \quad \text{significa} \quad \sum_{i=1}^n v_i w_i$$
+    ¡No hace falta escribir el símbolo $\sum$!
+  \end{alertblock}
+  
+  \pause
+  
+  \begin{block}{Terminología}
+    \begin{itemize}
+      \item \textbf{Índice repetido} (o ``mudo''): se suma sobre él
+      \item \textbf{Índice libre}: aparece una sola vez, no se suma
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Ejemplos de notación de Einstein}
+  \begin{ejemplos}
+    \begin{enumerate}
+      \item Producto punto:
+      $$v_i w_i = v_1 w_1 + v_2 w_2 + v_3 w_3$$
+      (índice $i$ repetido $\rightarrow$ suma)
+      
+      \pause
+      
+      \item Producto matriz-vector:
+      $$(A\vec{x})_i = A_{ij} x_j = A_{i1}x_1 + A_{i2}x_2 + A_{i3}x_3$$
+      ($j$ repetido $\rightarrow$ suma; $i$ libre $\rightarrow$ resultado es vector)
+      
+      \pause
+      
+      \item Traza de una matriz:
+      $$\text{tr}(A) = A_{ii} = A_{11} + A_{22} + A_{33}$$
+      ($i$ repetido en ambos lugares $\rightarrow$ suma)
+      
+      \pause
+      
+      \item Norma al cuadrado:
+      $$\|\vec{v}\|^2 = v_i v_i = v_1^2 + v_2^2 + v_3^2$$
+    \end{enumerate}
+  \end{ejemplos}
+\end{frame}
+
+\begin{frame}{Reglas importantes}
+  \begin{block}{Regla 1: Índice repetido = suma}
+    $$a_i b_i \quad \Rightarrow \quad \text{suma sobre } i$$
+  \end{block}
+  
+  \begin{block}{Regla 2: Índice libre = dimensión del resultado}
+    $$c_i = A_{ij} b_j$$
+    \begin{itemize}
+      \item $j$ repetido $\rightarrow$ se suma
+      \item $i$ libre $\rightarrow$ resultado es un vector (1 índice libre)
+    \end{itemize}
+  \end{block}
+  
+  \pause
+  
+  \begin{alertblock}{Advertencia}
+    Un índice NO puede aparecer más de 2 veces en un mismo término.
+    $$A_{ii} B_{ii} \quad \text{$\times$ (incorrecto)}$$
+    $$A_{ij} B_{ji} \quad \text{$\checkmark$ (correcto)}$$
+  \end{alertblock}
+\end{frame}
+
+\section{Producto Tensorial}
+
+\begin{frame}{¿Cómo crear una matriz desde dos vectores?}
+  \begin{block}{Idea}
+    Dados dos vectores $\vec{u}$ y $\vec{v}$, ¿podemos crear una matriz a partir de ellos?
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{Producto tensorial: $\vec{u} \otimes \vec{v}$}
+    Multiplicar \textbf{cada} componente de $\vec{u}$ con \textbf{cada} componente de $\vec{v}$:
+    $$(\vec{u} \otimes \vec{v})_{ij} = u_i v_j$$
+  \end{block}
+  
+  \pause
+  
+  \begin{ejemplo}
+    $$\vec{u} = \begin{pmatrix} 1 \\ 2 \end{pmatrix}, \quad \vec{v} = \begin{pmatrix} 3 \\ 4 \end{pmatrix}$$
+    $$\vec{u} \otimes \vec{v} = \begin{pmatrix} 1 \cdot 3 & 1 \cdot 4 \\ 2 \cdot 3 & 2 \cdot 4 \end{pmatrix} = \begin{pmatrix} 3 & 4 \\ 6 & 8 \end{pmatrix}$$
+  \end{ejemplo}
+\end{frame}
+
+\begin{frame}{Propiedades del producto tensorial}
+  \begin{block}{Propiedades importantes}
+    \begin{enumerate}
+      \item $\text{rango}(\vec{u} \otimes \vec{v}) = 1$ (siempre rango 1)
+      \item $(\alpha \vec{u}) \otimes \vec{v} = \alpha (\vec{u} \otimes \vec{v})$
+      \item $(\vec{u} + \vec{w}) \otimes \vec{v} = \vec{u} \otimes \vec{v} + \vec{w} \otimes \vec{v}$
+      \item NO es conmutativo: $\vec{u} \otimes \vec{v} \neq \vec{v} \otimes \vec{u}$
+    \end{enumerate}
+  \end{block}
+  
+  \pause
+  
+  \begin{alertblock}{Hecho importante}
+    Cualquier matriz de rango 1 se puede escribir como producto tensorial de dos vectores.
+  \end{alertblock}
+  
+  \pause
+  
+  \begin{block}{En notación de índices}
+    $$(\vec{u} \otimes \vec{v})_{ij} = u_i v_j$$
+    Sin índices repetidos $\rightarrow$ no hay suma $\rightarrow$ resultado es matriz (2 índices)
+  \end{block}
+\end{frame}
+
+\section{Operaciones con Tensores}
+
+\begin{frame}{¿Qué es la contracción?}
+  \begin{block}{Idea}
+    La \textbf{contracción} es ``reducir'' un tensor sumando sobre un par de índices.
+    
+    Es como convertir algo complejo en algo más simple.
+  \end{block}
+  
+  \pause
+  
+  \begin{ejemplos}[Casos que ya conoces]
+    \begin{itemize}
+      \item \textbf{Matriz $\times$ vector}: $w_i = A_{ij} v_j$
+      
+      Tensor orden 2 + vector $\rightarrow$ vector (orden 1)
+      
+      \pause
+      
+      \item \textbf{Traza}: $\text{tr}(A) = A_{ii}$
+      
+      Matriz (orden 2) $\rightarrow$ escalar (orden 0)
+      
+      \pause
+      
+      \item \textbf{Producto Frobenius}: $A : B = A_{ij} B_{ij}$
+      
+      Dos matrices $\rightarrow$ escalar
+    \end{itemize}
+  \end{ejemplos}
+\end{frame}
+
+\begin{frame}{Contracción: Definición general}
+  \begin{block}{Definición}
+    \textbf{Contraer} = sumar sobre un par de índices:
+    $$C_{ik} = T_{ijk} v_j = \sum_{j} T_{ijk} v_j$$
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{Regla general}
+    Si contraes tensor orden $m$ con tensor orden $n$:
+    $$\text{Resultado tiene orden } (m + n - 2)$$
+    
+    Porque pierdes 1 índice de cada uno al sumar.
+  \end{block}
+  
+  \pause
+  
+  \begin{ejemplos}
+    \begin{itemize}
+      \item Orden 2 + orden 1: $2 + 1 - 2 = 1$ (matriz $\times$ vector = vector) $\checkmark$
+      \item Orden 2 + orden 2: $2 + 2 - 2 = 2$ (matriz $\times$ matriz = matriz) $\checkmark$
+      \item Contracción total (traza): $2 + 0 - 2 = 0$ (matriz $\rightarrow$ escalar) $\checkmark$
+    \end{itemize}
+  \end{ejemplos}
+\end{frame}
+
+\section{Tensor de Esfuerzos}
+
+\begin{frame}{Aplicación: Tensor de esfuerzos}
+  \begin{block}{Situación}
+    En un material, el esfuerzo en diferentes direcciones se describe con una matriz $3 \times 3$:
+    $$\sigma_{ij} = \begin{pmatrix}
+      \sigma_{xx} & \sigma_{xy} & \sigma_{xz} \\
+      \sigma_{yx} & \sigma_{yy} & \sigma_{yz} \\
+      \sigma_{zx} & \sigma_{zy} & \sigma_{zz}
+    \end{pmatrix}$$
+    
+    donde $\sigma_{ij}$ = esfuerzo en dirección $j$ sobre plano perpendicular a $i$
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{Propiedades}
+    \begin{itemize}
+      \item Simétrico: $\sigma_{ij} = \sigma_{ji}$ (por equilibrio de momentos)
+      \item Traza: $\sigma_{ii} = \sigma_{xx} + \sigma_{yy} + \sigma_{zz}$ = presión hidráulica $\times 3$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\section{Transformación de Tensores}
+
+\begin{frame}{Cambio de coordenadas}
+  \begin{block}{Problema}
+    ¿Qué pasa con un tensor cuando rotas el sistema de coordenadas?
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{Transformación de vector}
+    Si rotas coordenadas con matriz $R$:
+    $$v'_i = R_{ij} v_j$$
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{Transformación de tensor orden 2}
+    Aplicas la rotación a CADA índice:
+    $$T'_{ij} = R_{ik} R_{jl} T_{kl}$$
+    
+    En notación matricial: $T' = R T R^T$
+  \end{block}
+  
+  \pause
+  
+  \begin{alertblock}{Invariantes}
+    Cantidades que NO cambian con rotación:
+    \begin{itemize}
+      \item Traza: $T_{ii}$
+      \item Determinante: $\det(T)$
+      \item Autovalores
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\section{Código Python}
+
+\begin{frame}[fragile]{Producto Tensorial en NumPy}
+\begin{lstlisting}
+import numpy as np
+
+# Vectores
+u = np.array([1, 2, 3])
+v = np.array([4, 5])
+
+# Producto tensorial (outer product)
+T = np.outer(u, v)
+
+print("u:", u)
+print("v:", v)
+print("\nProducto tensorial u ⊗ v:")
+print(T)
+print("\nForma:", T.shape)  # (3, 2)
+
+# Verificar: T[i,j] = u[i] * v[j]
+print("\nVerificacion T[1,0] =", T[1,0], "=", u[1], "*", v[0])
+
+# Rango de la matriz
+rango = np.linalg.matrix_rank(T)
+print(f"\nRango de la matriz: {rango}")  # Siempre 1
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Contracción de Tensores}
+\begin{lstlisting}
+import numpy as np
+
+# Tensor 3D (2x3x4)
+T = np.random.rand(2, 3, 4)
+
+# Vector para contraer
+v = np.array([1, 2, 3])
+
+# Contracccion sobre segundo indice: C[i,k] = T[i,j,k] * v[j]
+C = np.einsum('ijk,j->ik', T, v)
+
+print("Tensor original:", T.shape)  # (2, 3, 4)
+print("Vector:", v.shape)            # (3,)
+print("Resultado:", C.shape)         # (2, 4)
+
+# Verificacion manual para primer elemento
+manual = sum(T[0, j, 0] * v[j] for j in range(3))
+print(f"\nC[0,0] = {C[0,0]:.4f}")
+print(f"Verificacion manual: {manual:.4f}")
+
+# Traza de matriz 2D
+A = np.array([[1, 2], [3, 4]])
+traza = np.einsum('ii', A)  # Suma diagonal
+print(f"\nTraza de A: {traza}")  # 5
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Transformación de Tensor (Rotación)}
+\begin{lstlisting}
+import numpy as np
+
+# Tensor simetrico 2x2 (ej: tensor de esfuerzos)
+sigma = np.array([[100, 30],
+                  [ 30, 50]])
+
+# Matriz de rotacion 45 grados
+theta = np.pi/4
+R = np.array([[np.cos(theta), -np.sin(theta)],
+              [np.sin(theta),  np.cos(theta)]])
+
+# Transformar: sigma' = R @ sigma @ R^T
+sigma_rot = R @ sigma @ R.T
+
+print("Tensor original:")
+print(sigma)
+print("\nMatriz de rotacion:")
+print(R)
+print("\nTensor rotado:")
+print(sigma_rot)
+
+# Verificar invariante (traza)
+print(f"\nTraza original: {np.trace(sigma):.2f}")
+print(f"Traza rotada: {np.trace(sigma_rot):.2f}")
+
+# Autovalores (tambien invariantes)
+print(f"\nAutovalores originales: {np.linalg.eigvals(sigma)}")
+print(f"Autovalores rotados: {np.linalg.eigvals(sigma_rot)}")
+\end{lstlisting}
+\end{frame}
+
+\section{Resumen}
+
+\begin{frame}{Resumen: El camino recorrido}
+  \begin{block}{1. La jerarquía}
+    Escalar (0) $\rightarrow$ Vector (1) $\rightarrow$ Matriz (2) $\rightarrow$ Tensor (3+)
+    
+    Número de índices = orden del tensor
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{2. Notación de Einstein}
+    Índice repetido = suma automática: $v_i w_i = \sum_i v_i w_i$
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{3. Producto tensorial}
+    Crear tensor de orden mayor: $(\vec{u} \otimes \vec{v})_{ij} = u_i v_j$
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{4. Contracción}
+    Reducir orden sumando: tensor orden $(m+n-2)$ de tensores orden $m$ y $n$
+  \end{block}
+  
+  \pause
+  
+  \begin{block}{5. Transformaciones}
+    Cambio de coordenadas: $T'_{ij} = R_{ik} R_{jl} T_{kl}$
+    
+    Invariantes: traza, determinante, autovalores
+  \end{block}
+\end{frame}
+
+\begin{frame}{Ideas clave para recordar}
+  \begin{alertblock}{Conceptos fundamentales}
+    \begin{enumerate}
+      \item Tensores generalizan escalares, vectores y matrices
+      \item Orden = número de índices necesarios
+      \item Notación Einstein simplifica las sumas
+      \item Contracción = operación fundamental (incluye mult. matriz-vector)
+      \item Algunos valores no cambian con rotaciones (invariantes)
+    \end{enumerate}
+  \end{alertblock}
+  
+  \pause
+  
+  \begin{block}{Aplicaciones en ingeniería}
+    \begin{itemize}
+      \item Tensor de esfuerzos: $\sigma_{ij}$ (describe fuerzas internas)
+      \item Tensor de deformación: $\varepsilon_{ij}$ (describe deformaciones)
+      \item Tensor de elasticidad: $C_{ijkl}$ (relaciona esfuerzo y deformación)
+      \item Análisis de estados de carga complejos
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{¿Por qué estudiar tensores?}
+  \begin{block}{Ventajas}
+    \begin{enumerate}
+      \item \textbf{Notación compacta}: ecuaciones simples para sistemas complejos
+      \item \textbf{Independencia de coordenadas}: las leyes físicas no dependen de cómo midas
+      \item \textbf{Generalización}: un framework unificado para muchos conceptos
+      \item \textbf{Computación}: librerías como NumPy/PyTorch optimizadas para tensores
+    \end{enumerate}
+  \end{block}
+  
+  \pause
+  
+  \begin{alertblock}{En la práctica}
+    No necesitas memorizar todas las fórmulas. Lo importante es:
+    \begin{itemize}
+      \item Entender qué representa cada tensor
+      \item Saber qué operaciones existen
+      \item Usar herramientas computacionales (NumPy, etc.)
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\end{document}

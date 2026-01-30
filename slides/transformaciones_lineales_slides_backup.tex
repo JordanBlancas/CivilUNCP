@@ -1,0 +1,234 @@
+\documentclass[aspectratio=169]{beamer}
+\input{slides/_preamble_slides}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{tikz}
+
+\title{Transformaciones Lineales}
+\subtitle{Núcleo e Imagen}
+\author{Jordan Blancas}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Contenido}
+  \tableofcontents
+\end{frame}
+
+% ========================================
+% Transformaciones Lineales
+% ========================================
+
+\section{Transformaciones Lineales}
+
+\begin{frame}{Transformación Lineal}
+  \begin{block}{Definición}
+    Sean $V$ y $W$ espacios vectoriales sobre $\mathbb{F}$. Una función $T: V \to W$ es una \textbf{transformación lineal} si:
+    \begin{enumerate}
+      \item $T(u + v) = T(u) + T(v)$ para todo $u, v \in V$
+      \item $T(\alpha v) = \alpha T(v)$ para todo $\alpha \in \mathbb{F}$ y $v \in V$
+    \end{enumerate}
+  \end{block}
+  
+  \begin{block}{Equivalentemente}
+    $T(\alpha u + \beta v) = \alpha T(u) + \beta T(v)$ para todo $u, v \in V$ y $\alpha, \beta \in \mathbb{F}$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Ejemplos de Transformaciones Lineales}
+  \begin{ejemplos}
+    \begin{enumerate}
+      \item \textbf{Identidad}: $I: V \to V$, $I(v) = v$
+      
+      \item \textbf{Transformación cero}: $0: V \to W$, $0(v) = 0_W$
+      
+      \item \textbf{Multiplicación por matriz}: $T: \mathbb{R}^n \to \mathbb{R}^m$
+      $$T(x) = Ax$$
+      donde $A \in M_{m \times n}(\mathbb{R})$
+      
+      \item \textbf{Derivada}: $D: P_n(\mathbb{R}) \to P_{n-1}(\mathbb{R})$
+      $$D(p(x)) = p'(x)$$
+      
+      \item \textbf{Integral}: $I: C[a,b] \to \mathbb{R}$
+      $$I(f) = \int_a^b f(x) \, dx$$
+    \end{enumerate}
+  \end{ejemplos}
+\end{frame}
+
+\begin{frame}{Propiedades de Transformaciones Lineales}
+  \begin{teorema}
+    Sea $T: V \to W$ una transformación lineal. Entonces:
+    \begin{enumerate}
+      \item $T(0_V) = 0_W$
+      \item $T(-v) = -T(v)$ para todo $v \in V$
+      \item $T$ preserva combinaciones lineales:
+      $$T\left(\sum_{i=1}^k \alpha_i v_i\right) = \sum_{i=1}^k \alpha_i T(v_i)$$
+    \end{enumerate}
+  \end{teorema}
+  
+  \begin{alertblock}{Importante}
+    Una transformación lineal queda completamente determinada por su acción sobre una base de $V$.
+  \end{alertblock}
+\end{frame}
+
+\section{Núcleo}
+
+\begin{frame}{Núcleo}
+  \begin{block}{Definición}
+    El \textbf{núcleo} de una transformación lineal $T: V \to W$ es:
+    $$\ker(T) = \{v \in V \,:\, T(v) = 0_W\}$$
+    Es el conjunto de todos los vectores que $T$ mapea al vector cero.
+  \end{block}
+  
+  \begin{teorema}
+    $\ker(T)$ es un subespacio vectorial de $V$.
+  \end{teorema}
+  
+  \begin{ejemplo}
+    Para $T: \mathbb{R}^3 \to \mathbb{R}^2$, $T(x,y,z) = (x+y, 2x+2y)$:
+    $$\ker(T) = \{(x,y,z) : x+y=0\} = \{(-t, t, s) : t, s \in \mathbb{R}\}$$
+    Es un plano que pasa por el origen.
+  \end{ejemplo}
+\end{frame}
+
+\section{Imagen}
+
+\begin{frame}{Imagen}
+  \begin{block}{Definición}
+    La \textbf{imagen} (o rango) de una transformación lineal $T: V \to W$ es:
+    $$\text{Im}(T) = \{w \in W \,:\, \exists v \in V \text{ tal que } T(v) = w\}$$
+    Es el conjunto de todos los vectores en $W$ que son imagen de algún vector en $V$.
+  \end{block}
+  
+  \begin{teorema}
+    $\text{Im}(T)$ es un subespacio vectorial de $W$.
+  \end{teorema}
+  
+  \begin{block}{Observación}
+    Si $\{v_1, \ldots, v_n\}$ es una base de $V$, entonces:
+    $$\text{Im}(T) = \text{span}\{T(v_1), \ldots, T(v_n)\}$$
+  \end{block}
+\end{frame}
+
+\section{Inyectividad y Sobreyectividad}
+
+\begin{frame}{Inyectividad y Sobreyectividad}
+  \begin{block}{Transformación Inyectiva}
+    $T$ es \textbf{inyectiva} si:
+    $$T(u) = T(v) \implies u = v$$
+    
+    \textbf{Equivalentemente}: $\ker(T) = \{0\}$
+  \end{block}
+  
+  \begin{block}{Transformación Sobreyectiva}
+    $T$ es \textbf{sobreyectiva} si:
+    $$\text{Im}(T) = W$$
+    
+    Es decir, todo vector en $W$ es imagen de algún vector en $V$.
+  \end{block}
+  
+  \begin{block}{Isomorfismo}
+    $T$ es un \textbf{isomorfismo} si es inyectiva y sobreyectiva.
+  \end{block}
+\end{frame}
+
+\section{Teorema de la Dimensión}
+
+\begin{frame}{Teorema de la Dimensión}
+  \begin{teorema}[Teorema Fundamental]
+    Sea $T: V \to W$ una transformación lineal, con $\dim(V) < \infty$. Entonces:
+    $$\boxed{\dim(V) = \dim(\ker(T)) + \dim(\text{Im}(T))}$$
+  \end{teorema}
+  
+  \begin{block}{Nomenclatura}
+    \begin{itemize}
+      \item \textbf{Nulidad}: $\text{nul}(T) = \dim(\ker(T))$
+      \item \textbf{Rango}: $\text{rango}(T) = \dim(\text{Im}(T))$
+    \end{itemize}
+    $$\boxed{\dim(V) = \text{nul}(T) + \text{rango}(T)}$$
+  \end{block}
+  
+  \begin{alertblock}{Consecuencia}
+    Para $T: \mathbb{R}^n \to \mathbb{R}^m$ dada por $T(x) = Ax$:
+    $$n = \text{nul}(A) + \text{rango}(A)$$
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Aplicaciones del Teorema}
+  \begin{block}{Consecuencias Importantes}
+    \begin{itemize}
+      \item Si $T: V \to W$ es inyectiva, entonces $\dim(V) \leq \dim(W)$
+      \item Si $T: V \to W$ es sobreyectiva, entonces $\dim(V) \geq \dim(W)$
+      \item Si $T: V \to W$ es un isomorfismo, entonces $\dim(V) = \dim(W)$
+    \end{itemize}
+  \end{block}
+  
+  \begin{ejemplo}
+    Sea $T: \mathbb{R}^5 \to \mathbb{R}^3$ con $\text{rank}(T) = 2$. Entonces:
+    $$\text{nullity}(T) = 5 - 2 = 3$$
+    El núcleo es un subespacio de dimensión 3 en $\mathbb{R}^5$.
+  \end{ejemplo}
+\end{frame}
+
+\section{Representación Matricial}
+
+\begin{frame}{Matriz de una Transformación Lineal}
+  \begin{block}{Representación Matricial}
+    Sea $T: \mathbb{R}^n \to \mathbb{R}^m$ lineal. Existe una única matriz $A \in M_{m \times n}(\mathbb{R})$ tal que:
+    $$T(x) = Ax \quad \forall x \in \mathbb{R}^n$$
+  \end{block}
+  
+  \begin{block}{Construcción}
+    Si $\{e_1, \ldots, e_n\}$ es la base canónica de $\mathbb{R}^n$, entonces la matriz $A$ tiene como columnas:
+    $$A = [T(e_1) \,|\, T(e_2) \,|\, \cdots \,|\, T(e_n)]$$
+  \end{block}
+  
+  \begin{ejemplo}
+    Para $T: \mathbb{R}^2 \to \mathbb{R}^2$, rotación por $90^\circ$:
+    $$T(1,0) = (0,1), \quad T(0,1) = (-1,0)$$
+    $$A = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$$
+  \end{ejemplo}
+\end{frame}
+
+\section{Resumen}
+
+\begin{frame}{Resumen}
+  \begin{block}{Conceptos Clave}
+    \begin{itemize}
+      \item \textbf{Transformación lineal}: preserva suma y multiplicación por escalares
+      \item \textbf{Núcleo}: vectores que van al cero
+      \item \textbf{Imagen}: vectores alcanzables
+      \item \textbf{Inyectividad}: $\ker(T) = \{0\}$
+      \item \textbf{Sobreyectividad}: $\text{Im}(T) = W$
+    \end{itemize}
+  \end{block}
+  
+  \begin{alertblock}{Teorema de la Dimensión}
+    $$\dim(V) = \dim(\ker T) + \dim(\text{Im} T)$$
+    Es la relación fundamental entre el dominio, núcleo e imagen.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Referencias}
+  \begin{thebibliography}{99}
+    \bibitem{strang} G. Strang, \textit{Linear Algebra and Its Applications}, 4th ed., Cengage Learning, 2006.
+    
+    \bibitem{axler} S. Axler, \textit{Linear Algebra Done Right}, 3rd ed., Springer, 2015.
+    
+    \bibitem{friedberg} S. Friedberg, A. Insel, L. Spence, \textit{Linear Algebra}, 5th ed., Pearson, 2018.
+  \end{thebibliography}
+\end{frame}
+
+\begin{frame}
+  \centering
+  \Huge ¿Preguntas?
+  
+  \vspace{1cm}
+  
+  \Large Gracias por su atención
+\end{frame}
+
+\end{document}

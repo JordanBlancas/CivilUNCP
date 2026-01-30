@@ -1,0 +1,304 @@
+\documentclass[aspectratio=169]{beamer}
+\input{_preamble_slides}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{listings}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!60!black},
+  stringstyle=\color{red},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  backgroundcolor=\color{lightGray}
+}
+
+\title{Bases, Dimensiones y Espacios Generados}
+\subtitle{Álgebra Lineal}
+\author{Jordan Blancas}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section{Motivación}
+
+\begin{frame}{¿Por qué estudiar bases y dimensiones?}
+  \begin{block}{Problema práctico}
+    En una estructura:
+    \begin{itemize}
+      \item ¿Cuántos movimientos \textit{independientes} puede hacer?
+      \item ¿Cómo describir cualquier desplazamiento usando movimientos básicos?
+    \end{itemize}
+  \end{block}
+  
+  \begin{alertblock}{La respuesta}
+    \begin{itemize}
+      \item \textbf{Base}: conjunto de movimientos básicos independientes
+      \item \textbf{Dimensión}: número mínimo de movimientos necesarios
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\section{Combinaciones y Espacios Generados}
+
+\begin{frame}{Combinaciones Lineales}
+  \begin{block}{Definición}
+    Una \textbf{combinación lineal} de vectores $v_1, \ldots, v_k$ es:
+    $$w = \alpha_1 v_1 + \alpha_2 v_2 + \cdots + \alpha_k v_k$$
+  \end{block}
+  
+  \begin{ejemplo}
+    En $\mathbb{R}^2$: $(5, 3) = 5(1, 0) + 3(0, 1)$
+  \end{ejemplo}
+  
+  \begin{ejemplos}
+    \begin{itemize}
+      \item En $\mathbb{R}^3$: $(6, 7, 11) = 2(1, 2, 3) + 4(1, 1, 2)$
+      \item Puedes crear infinitos vectores "mezclando" los vectores base
+    \end{itemize}
+  \end{ejemplos}
+\end{frame}
+
+\begin{frame}{Espacio Generado}
+  \begin{block}{Pregunta clave}
+    Dado un conjunto de vectores $\{v_1, \ldots, v_k\}$, ¿qué vectores puedo alcanzar usando combinaciones lineales?
+  \end{block}
+  
+  \begin{block}{Definición}
+    El \textbf{espacio generado} (o span) es:
+    $$\text{Gen}(v_1, \ldots, v_k) = \{\alpha_1 v_1 + \cdots + \alpha_k v_k : \alpha_i \in \mathbb{R}\}$$
+    
+    Es el conjunto de TODAS las combinaciones lineales posibles.
+  \end{block}
+  
+  \begin{alertblock}{Propiedad importante}
+    $\text{Gen}(v_1, \ldots, v_k)$ siempre es un subespacio vectorial.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Ejemplos de Espacios Generados}
+  \begin{ejemplos}
+    \begin{itemize}
+      \item $\text{Gen}((1, 0), (0, 1)) = \mathbb{R}^2$ (todo el plano)
+      \item $\text{Gen}((1, 2)) = \{(t, 2t) : t \in \mathbb{R}\}$ (recta $y = 2x$)
+      \item $\text{Gen}((1, 0, 0), (0, 1, 0)) = $ plano $xy$ en $\mathbb{R}^3$
+      \item $\text{Gen}((1, 1, 1)) = \{(t, t, t) : t \in \mathbb{R}\}$ (recta diagonal)
+    \end{itemize}
+  \end{ejemplos}
+  
+  \begin{block}{Interpretación geométrica}
+    \begin{itemize}
+      \item 1 vector → genera una recta
+      \item 2 vectores LI → generan un plano
+      \item 3 vectores LI en $\mathbb{R}^3$ → generan todo el espacio
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Preguntas sobre Espacios Generados}
+  \begin{block}{¿Está un vector en el espacio generado?}
+    Pregunta: ¿$(7, 5)$ está en $\text{Gen}((1, 2), (2, 1))$?
+    
+    Equivale a: ¿existen $\alpha, \beta$ tales que:
+    $$(7, 5) = \alpha(1, 2) + \beta(2, 1)$$
+    
+    Sistema: $\alpha + 2\beta = 7$ y $2\alpha + \beta = 5$
+    
+    Solución: $\alpha = 1, \beta = 3$ → SÍ está
+  \end{block}
+  
+  \begin{block}{¿Cuántos vectores necesito?}
+    Si añades vectores redundantes (LD), el espacio generado NO crece.
+    
+    $\text{Gen}((1,0), (0,1), (2,0)) = \text{Gen}((1,0), (0,1)) = \mathbb{R}^2$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Independencia Lineal}
+  \begin{block}{Idea}
+    Vectores son \textbf{linealmente independientes (LI)} si ninguno es combinación de los demás (no hay redundancia).
+  \end{block}
+  
+  \begin{block}{Definición formal}
+    $\{v_1, \ldots, v_k\}$ son LI si:
+    $$\alpha_1 v_1 + \cdots + \alpha_k v_k = 0 \quad \Rightarrow \quad \alpha_1 = \cdots = \alpha_k = 0$$
+  \end{block}
+  
+  \begin{ejemplos}
+    \begin{itemize}
+      \item $(1, 0)$ y $(0, 1)$ son LI $\checkmark$
+      \item $(1, 0)$ y $(2, 0)$ son LD (misma dirección) $\times$
+      \item $(1, 2)$ y $(2, 4)$ son LD (uno es múltiplo del otro) $\times$
+    \end{itemize}
+  \end{ejemplos}
+\end{frame}
+
+\section{Base}
+
+\begin{frame}{Base: Definición}
+  \begin{block}{Definición}
+    Una \textbf{base} $\mathcal{B} = \{v_1, \ldots, v_n\}$ de $V$ cumple:
+    \begin{enumerate}
+      \item $\mathcal{B}$ es linealmente independiente
+      \item $\text{Gen}(\mathcal{B}) = V$ (genera todo el espacio)
+    \end{enumerate}
+  \end{block}
+  
+  \begin{alertblock}{Conjunto mínimo e independiente que genera todo}
+  \end{alertblock}
+  
+  \begin{ejemplos}
+    \begin{itemize}
+      \item $\mathbb{R}^2$: $\{(1,0), (0,1)\}$ (base canónica)
+      \item $\mathbb{R}^2$: $\{(1,1), (1,-1)\}$ (otra base válida)
+      \item $\mathbb{R}^3$: $\{(1,0,0), (0,1,0), (0,0,1)\}$
+      \item Polinomios grado $\leq 2$: $\{1, x, x^2\}$
+    \end{itemize}
+  \end{ejemplos}
+\end{frame}
+
+\begin{frame}{Propiedad de Unicidad}
+  \begin{teorema}
+    Si $\mathcal{B} = \{v_1, \ldots, v_n\}$ es base de $V$, entonces todo $v \in V$ se escribe de forma \textbf{ÚNICA}:
+    $$v = c_1 v_1 + c_2 v_2 + \cdots + c_n v_n$$
+  \end{teorema}
+  
+  \begin{block}{Coordenadas}
+    Los números $(c_1, \ldots, c_n)$ son las \textbf{coordenadas} de $v$ en la base $\mathcal{B}$.
+  \end{block}
+  
+  \begin{ejemplo}
+    En $\mathbb{R}^2$ con base $\{(1,1), (1,-1)\}$:
+    
+    $(5, 3) = 4(1,1) + 1(1,-1)$
+    
+    Coordenadas: $(4, 1)$ en esta base
+  \end{ejemplo}
+\end{frame}
+
+\section{Dimensión}
+
+\begin{frame}{Dimensión}
+  \begin{teorema}[Fundamental]
+    Todas las bases de un mismo espacio tienen el mismo número de vectores.
+  \end{teorema}
+  
+  \begin{block}{Definición}
+    La \textbf{dimensión} $\dim(V)$ es el número de vectores en cualquier base de $V$.
+  \end{block}
+  
+  \begin{ejemplos}
+    \begin{itemize}
+      \item $\dim(\mathbb{R}^2) = 2$, $\dim(\mathbb{R}^3) = 3$, $\dim(\mathbb{R}^n) = n$
+      \item $\dim(P_2(\mathbb{R})) = 3$ (base: $\{1, x, x^2\}$)
+      \item $\dim(M_{2 \times 3}) = 6$ (matrices $2 \times 3$)
+    \end{itemize}
+  \end{ejemplos}
+  
+  \begin{alertblock}{Interpretación física}
+    Dimensión = número de grados de libertad independientes
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Reglas sobre Dimensión}
+  \begin{block}{Si $\dim(V) = n$:}
+    \begin{enumerate}
+      \item Cualquier $n$ vectores LI forman una base
+      \item Cualquier $n$ vectores que generan $V$ forman una base
+      \item No puedes tener más de $n$ vectores LI en $V$
+      \item Necesitas al menos $n$ vectores para generar $V$
+    \end{enumerate}
+  \end{block}
+  
+  \begin{ejemplo}
+    En $\mathbb{R}^3$ ($\dim = 3$):
+    \begin{itemize}
+      \item 3 vectores LI → es base automáticamente
+      \item 4 vectores → al menos uno es dependiente
+      \item 2 vectores LI → no generan todo $\mathbb{R}^3$
+    \end{itemize}
+  \end{ejemplo}
+\end{frame}
+
+\section{Subespacios}
+
+\begin{frame}{Subespacios}
+  \begin{block}{Definición}
+    $W \subseteq V$ es \textbf{subespacio} si:
+    \begin{enumerate}
+      \item $\vec{0} \in W$
+      \item Cerrado bajo suma y multiplicación escalar
+    \end{enumerate}
+  \end{block}
+  
+  \begin{ejemplos}
+    En $\mathbb{R}^3$:
+    \begin{itemize}
+      \item Recta por el origen: $\dim = 1$
+      \item Plano por el origen: $\dim = 2$
+      \item Todo $\mathbb{R}^3$: $\dim = 3$
+    \end{itemize}
+  \end{ejemplos}
+  
+  \begin{alertblock}{Clave}
+    $\dim(W) \leq \dim(V)$ si $W \subseteq V$
+  \end{alertblock}
+\end{frame}
+
+\section{Código}
+
+\begin{frame}[fragile]{Código Python Básico}
+\begin{lstlisting}
+import numpy as np
+
+# Vectores en R^3
+v1 = np.array([1, 2, 3])
+v2 = np.array([4, 5, 6])
+v3 = np.array([7, 8, 9])
+
+# Formar matriz (vectores como columnas)
+A = np.column_stack([v1, v2, v3])
+
+# Calcular rango
+rango = np.linalg.matrix_rank(A)
+num_vectores = A.shape[1]
+
+print(f"Rango: {rango}")
+print(f"Numero de vectores: {num_vectores}")
+
+if rango == num_vectores:
+    print("Los vectores son LI (forman base)")
+else:
+    print("Los vectores son LD (dependientes)")
+    
+# La dimension es el rango de la matriz
+print(f"Dimension del espacio generado: {rango}")
+\end{lstlisting}
+\end{frame}
+
+\section{Resumen}
+
+\begin{frame}{Resumen}
+  \begin{enumerate}
+    \item \textbf{Combinación lineal}: $\alpha_1 v_1 + \cdots + \alpha_k v_k$
+    \item \textbf{Espacio generado}: todas las combinaciones lineales de un conjunto
+    \item \textbf{Independencia lineal}: vectores sin redundancia
+    \item \textbf{Base}: conjunto mínimo LI que genera todo
+    \item \textbf{Dimensión}: número de vectores en cualquier base
+    \item \textbf{Subespacios}: espacios más pequeños dentro de $V$
+  \end{enumerate}
+  
+  \begin{alertblock}{Clave}
+    Base = conjunto LI que genera todo $\quad \Rightarrow \quad$ dimensión = tamaño de la base
+  \end{alertblock}
+\end{frame}
+
+\end{document}
